@@ -58,6 +58,7 @@ import com.codelab.basics.ui.theme.BasicsCodelabTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // setContentでレイアウトを設定するが、XMLファイルではなく、@Composable関数を呼び出す
         setContent {
             BasicsCodelabTheme {
                 MyApp(modifier = Modifier.fillMaxSize())
@@ -66,6 +67,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// @Composableアノテーションがついた関数は、内部で@Composableがついた別の関数を呼び出すことができる。
 @Composable
 fun MyApp(modifier: Modifier = Modifier) {
     var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
