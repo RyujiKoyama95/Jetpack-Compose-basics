@@ -18,6 +18,7 @@ package com.codelab.basics
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
+import android.support.v4.os.IResultReceiver2.Default
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateContentSize
@@ -60,6 +61,34 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // setContentでレイアウトを設定するが、XMLファイルではなく、@Composable関数を呼び出す
         // XMLファイルを指定する場合はsetContentView()
+        setContent { 
+            BasicsCodelabTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Greeting(name = "Android")
+                }
+            }
+        }
+    }
 
+    @Preview(showBackground = true, name = "text preview")
+    @Composable
+    private fun DefaultPreview() {
+        BasicsCodelabTheme {
+            Greeting("Android")
+        }
+    }
+
+    @Composable
+    private fun Greeting(name: String) {
+        // Surfaceは色を受け取る。
+        // Surfaceの中にネストされたコンポーネント(ここではText)は、背景色の上に描画される。
+        Surface(color = MaterialTheme.colorScheme.primary) {
+            // SurfaceやTextなどのほとんどのCompose UI要素は引数にmodifier(修飾)を持っている。
+            // modifierは配置、表示、動作を指定できる。
+            Text(text = "Hello! $name", modifier = Modifier.padding(24.dp))
+        }
     }
 }
