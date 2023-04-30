@@ -63,18 +63,22 @@ class MainActivity : ComponentActivity() {
         // XMLファイルを指定する場合はsetContentView()
         setContent { 
             BasicsCodelabTheme {
-                MyApp(Modifier.fillMaxSize())
+                MyApp(modifier = Modifier.fillMaxSize())
             }
         }
     }
 
     @Composable
-    private fun MyApp(modifier: Modifier = Modifier) {
+    private fun MyApp(names: List<String> = listOf("name1", "name2", "name3"), modifier: Modifier = Modifier) {
         Surface(
             modifier,
             color = MaterialTheme.colorScheme.background
         ) {
-            Greeting(name = "Android")
+            Column {
+                for (name in names) {
+                    Greeting(name = "Android")
+                }
+            }
         }
     }
 
