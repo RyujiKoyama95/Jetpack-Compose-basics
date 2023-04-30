@@ -63,13 +63,18 @@ class MainActivity : ComponentActivity() {
         // XMLファイルを指定する場合はsetContentView()
         setContent { 
             BasicsCodelabTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting(name = "Android")
-                }
+                MyApp(Modifier.fillMaxSize())
             }
+        }
+    }
+
+    @Composable
+    private fun MyApp(modifier: Modifier = Modifier) {
+        Surface(
+            modifier,
+            color = MaterialTheme.colorScheme.background
+        ) {
+            Greeting(name = "Android")
         }
     }
 
@@ -86,8 +91,8 @@ class MainActivity : ComponentActivity() {
         // Surfaceは色を受け取る。
         // Surfaceの中にネストされたコンポーネント(ここではText)は、背景色の上に描画される。
         Surface(color = MaterialTheme.colorScheme.primary) {
-            // SurfaceやTextなどのほとんどのCompose UI要素は引数にmodifier(修飾)を持っている。
-            // modifierは配置、表示、動作を指定できる。
+            // SurfaceやTextなどのほとんどのCompose UI要素は引数にmodifier(修飾子)を持っている。
+            // modifierは親レイアウト内での配置、表示、動作を指定できる。
             Text(text = "Hello! $name", modifier = Modifier.padding(24.dp))
         }
     }
