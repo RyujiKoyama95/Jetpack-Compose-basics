@@ -69,14 +69,14 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun MyApp(names: List<String> = listOf("name1", "name2", "name3"), modifier: Modifier = Modifier) {
+    private fun MyApp(names: List<String> = listOf("name", "aa", "compose"), modifier: Modifier = Modifier) {
         Surface(
             modifier,
             color = MaterialTheme.colorScheme.background
         ) {
             Column {
                 for (name in names) {
-                    Greeting(name = "Android")
+                    Greeting(name = name)
                 }
             }
         }
@@ -86,7 +86,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun DefaultPreview() {
         BasicsCodelabTheme {
-            Greeting("Android")
+            MyApp()
         }
     }
 
