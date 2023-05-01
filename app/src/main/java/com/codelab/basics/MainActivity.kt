@@ -70,14 +70,9 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun MyApp(names: List<String> = listOf("name", "aa", "compose"), modifier: Modifier = Modifier) {
-        Surface(
-            modifier,
-            color = MaterialTheme.colorScheme.background
-        ) {
-            Column {
-                for (name in names) {
-                    Greeting(name = name)
-                }
+        Column(modifier = modifier.padding(vertical = 4.dp)) {
+            for (name in names) {
+                Greeting(name = name)
             }
         }
     }
