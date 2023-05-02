@@ -38,6 +38,7 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -94,12 +95,15 @@ class MainActivity : ComponentActivity() {
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
             ) {
-            // SurfaceやTextなどのほとんどのCompose UI要素は引数にmodifier(修飾子)を持っている。
-            // 1つの要素に複数の修飾子をつけるときは、繋げればいい。
-            Column(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
-                // modifierは親レイアウト内での配置、表示、動作を指定できる。
-                Text(text = "Hello!")
-                Text(text = "$name")
+            Row(modifier = Modifier.padding(24.dp)) {
+                Column(modifier = Modifier.weight(1f)) {
+                    // modifierは親レイアウト内での配置、表示、動作を指定できる。
+                    Text(text = "Hello!")
+                    Text(text = "$name")
+                }
+                ElevatedButton(onClick = { /*TODO*/ }) {
+                    Text(text = "show more")
+                }
             }
         }
     }
