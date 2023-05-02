@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -89,9 +90,13 @@ class MainActivity : ComponentActivity() {
     private fun Greeting(name: String) {
         // Surfaceは色を受け取る。
         // Surfaceの中にネストされたコンポーネント(ここではText)は、背景色の上に描画される。
-        Surface(color = MaterialTheme.colorScheme.primary) {
+        Surface(
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+            ) {
             // SurfaceやTextなどのほとんどのCompose UI要素は引数にmodifier(修飾子)を持っている。
-            Column(modifier = Modifier.padding(24.dp)) {
+            // 1つの要素に複数の修飾子をつけるときは、繋げればいい。
+            Column(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
                 // modifierは親レイアウト内での配置、表示、動作を指定できる。
                 Text(text = "Hello!")
                 Text(text = "$name")
