@@ -89,6 +89,15 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun Greeting(name: String) {
+        // 状態保持のためexpandedフラグを定義。
+        // 単純にフラグ追加しても、Composeは状態変更として検出しない。
+        // state/MutableStateは何らかの値を保持し、値が変更した場合は再Compose(UI更新)するインターフェース。
+        // しかし、再コンポジションが随時発生する可能性があるため、フラグはリセットされてしまう問題がある。
+        // 再コンポジションの前後で状態を保持するにはrememberを使用して、状態を保護する。リセットされない。
+        // 状態が変化すると、自動的に再コンポーズする。
+        // また、同じコンポーズを別々の部分から呼び出すと、異なるUIが生成され、状態も別々になる。
+        // 例えば今回の場合だと、ボタンが複数あるため、それぞれで固有の状態を保持する。
+        val expanded = remember { mutableStateOf(false) }
         // Surfaceは色を受け取る。
         // Surfaceの中にネストされたコンポーネント(ここではText)は、背景色の上に描画される。
         Surface(
@@ -96,13 +105,15 @@ class MainActivity : ComponentActivity() {
             modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
             ) {
             Row(modifier = Modifier.padding(24.dp)) {
+                // SurfaceやTextなどのほとんどのCompose UI要素は引数にmodifier(修飾子)を持っている。
+                // 1つの要素に複数の修飾子をつけるときは、繋げればいい。
                 Column(modifier = Modifier.weight(1f)) {
                     // modifierは親レイアウト内での配置、表示、動作を指定できる。
                     Text(text = "Hello!")
                     Text(text = "$name")
                 }
-                ElevatedButton(onClick = { /*TODO*/ }) {
-                    Text(text = "show more")
+                ElevatedButton(onClick = { expanded.value = !expanded.value }) {
+                    Text(if (expanded.value) "show less" else "show more")
                 }
             }
         }
