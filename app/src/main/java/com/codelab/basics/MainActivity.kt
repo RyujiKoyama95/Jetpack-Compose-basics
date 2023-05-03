@@ -126,4 +126,30 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+    @Composable
+    private fun OnboardingScreen(modifier: Modifier = Modifier) {
+        // =ではなくbyにすることで、.valueでアクセスせずに済む
+        var shouldShowScreen by remember { mutableStateOf(true) }
+        Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "Welcome to the Basics Codelab!")
+            Button(
+                modifier = modifier.padding(24.dp),
+                onClick = { shouldShowScreen = false }
+            ) {
+                Text(text = "Continue")
+            }
+        }
+    }
+
+    @Preview
+    @Composable
+    private fun OnboardingPreview() {
+        BasicsCodelabTheme {
+            OnboardingScreen()
+        }
+    }
 }
