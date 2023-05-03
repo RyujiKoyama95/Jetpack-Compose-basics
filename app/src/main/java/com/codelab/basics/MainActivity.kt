@@ -71,10 +71,13 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun MyApp(names: List<String> = listOf("name", "aa", "compose"), modifier: Modifier = Modifier) {
-        Column(modifier = modifier.padding(vertical = 4.dp)) {
-            for (name in names) {
-                Greeting(name = name)
+    private fun MyApp(modifier: Modifier = Modifier) {
+        val shouldShowOnboarding by remember { mutableStateOf(true) }
+        Surface(modifier) {
+            if (shouldShowOnboarding) {
+                OnboardingScreen()
+            } else {
+                Greetings()
             }
         }
     }
@@ -84,6 +87,34 @@ class MainActivity : ComponentActivity() {
     private fun DefaultPreview() {
         BasicsCodelabTheme {
             MyApp()
+        }
+    }
+
+    @Preview
+    @Composable
+    private fun MyAppPreview() {
+        BasicsCodelabTheme {
+            MyApp(Modifier.fillMaxSize())
+        }
+    }
+
+    @Composable
+    private fun Greetings(
+        names: List<String> = listOf("name", "aa", "compose"),
+        modifier: Modifier = Modifier
+    ) {
+        Column(modifier = modifier.padding(vertical = 4.dp)) {
+            for (name in names) {
+                Greeting(name = name)
+            }
+        }
+    }
+
+    @Preview
+    @Composable
+    private fun GreetingsPreview() {
+        BasicsCodelabTheme {
+            Greetings()
         }
     }
 
