@@ -72,10 +72,12 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun MyApp(modifier: Modifier = Modifier) {
-        val shouldShowOnboarding by remember { mutableStateOf(true) }
+        var shouldShowOnboarding by remember { mutableStateOf(true) }
         Surface(modifier) {
             if (shouldShowOnboarding) {
-                OnboardingScreen()
+                OnboardingScreen(onContinueClicked = {
+                    shouldShowOnboarding = false
+                })
             } else {
                 Greetings()
             }
@@ -158,9 +160,10 @@ class MainActivity : ComponentActivity() {
         }
     }
     @Composable
-    private fun OnboardingScreen(modifier: Modifier = Modifier) {
-        // =ではなくbyにすることで、.valueでアクセスせずに済む
-        var shouldShowScreen by remember { mutableStateOf(true) }
+    private fun OnboardingScreen(
+        modifier: Modifier = Modifier,
+        onContinueClicked: () -> Unit
+    ) {
         Column(
             modifier = modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -169,7 +172,7 @@ class MainActivity : ComponentActivity() {
             Text(text = "Welcome to the Basics Codelab!")
             Button(
                 modifier = modifier.padding(24.dp),
-                onClick = { shouldShowScreen = false }
+                onClick = onContinueClicked
             ) {
                 Text(text = "Continue")
             }
@@ -180,7 +183,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun OnboardingPreview() {
         BasicsCodelabTheme {
-            OnboardingScreen()
+            OnboardingScreen(onContinueClicked = {})
         }
     }
 }
