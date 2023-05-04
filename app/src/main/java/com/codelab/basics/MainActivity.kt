@@ -23,6 +23,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -138,12 +139,14 @@ class MainActivity : ComponentActivity() {
         // 状態が変化すると、自動的に再コンポーズする。
         // また、同じコンポーズを別々の部分から呼び出すと、異なるUIが生成され、状態も別々になる。
         // 例えば今回の場合だと、ボタンが複数あるため、それぞれで固有の状態を保持する。
-        val expanded = remember { mutableStateOf(false) }
-        val extraPadding = if (expanded.value) {
-            48.dp
-        } else {
-            0.dp
-        }
+        var expanded by remember { mutableStateOf(false) }
+        val extraPadding by animateDpAsState (
+            if (expanded) 48.dp else 0.dp,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessLow
+            )
+        )
         // Surfaceは色を受け取る。
         // Surfaceの中にネストされたコンポーネント(ここではText)は、背景色の上に描画される。
         Surface(
@@ -155,14 +158,14 @@ class MainActivity : ComponentActivity() {
                 // 1つの要素に複数の修飾子をつけるときは、繋げればいい。
                 Column(modifier = Modifier
                     .weight(1f)
-                    .padding(bottom = extraPadding)
+                    .padding(bottom = extraPadding.coerceAtLeast(0.dp))
                 ) {
                     // modifierは親レイアウト内での配置、表示、動作を指定できる。
                     Text(text = "Hello!")
                     Text(text = "$name")
                 }
-                ElevatedButton(onClick = { expanded.value = !expanded.value }) {
-                    Text(if (expanded.value) "show less" else "show more")
+                ElevatedButton(onClick = { expanded = !expanded }) {
+                    Text(if (expanded) "show less" else "show more")
                 }
             }
         }
