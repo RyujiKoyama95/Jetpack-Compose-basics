@@ -102,11 +102,16 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun Greetings(
-        names: List<String> = listOf("name", "aa", "compose"),
+        names: List<String> = List(1000) { "$it" },
         modifier: Modifier = Modifier
     ) {
-        Column(modifier = modifier.padding(vertical = 4.dp)) {
-            for (name in names) {
+        // Column{}の場合、数千のリストを表示すると、全てをレンダリングするので、フリーズの原因になる。
+        // 画面領域のみ表示されているリストをレンダリングするLazyColumn{}を使用するべき。
+        // ViewのRecyclerViewと似たもの。
+        LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
+            // LazyColumnの使用方法としては、基本的にスコープ内でitemsを使用し、
+            // この中にリストの個々のアイテムを表示するロジックを書く。
+            items(items = names) {name ->
                 Greeting(name = name)
             }
         }
