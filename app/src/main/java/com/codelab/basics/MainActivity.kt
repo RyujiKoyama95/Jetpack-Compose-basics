@@ -72,7 +72,10 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun MyApp(modifier: Modifier = Modifier) {
-        var shouldShowOnboarding by remember { mutableStateOf(true) }
+        // remember関数はComposableがコンポジション内で保持されている場合のみ、機能する。
+        // アクティビティのリセット(画面回転やプロセスの終了等)が起こると、全ての状態が消えてしまう。
+        // この場合はrememberSaveable関数を使用する。
+        var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
         Surface(modifier) {
             if (shouldShowOnboarding) {
                 OnboardingScreen(onContinueClicked = {
