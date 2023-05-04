@@ -88,6 +88,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @Preview(
+        showBackground = true,
+        widthDp = 320,
+        uiMode = UI_MODE_NIGHT_YES,
+        name = "Dark"
+    )
+
     @Preview(showBackground = true, name = "text preview")
     @Composable
     private fun DefaultPreview() {
@@ -162,7 +169,12 @@ class MainActivity : ComponentActivity() {
                 ) {
                     // modifierは親レイアウト内での配置、表示、動作を指定できる。
                     Text(text = "Hello!")
-                    Text(text = "$name")
+                    Text(
+                        text = "$name",
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            fontWeight = FontWeight.ExtraBold
+                        )
+                    )
                 }
                 ElevatedButton(onClick = { expanded = !expanded }) {
                     Text(if (expanded) "show less" else "show more")
