@@ -53,6 +53,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -138,48 +139,13 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun Greeting(name: String) {
-        // 状態保持のためexpandedフラグを定義。
-        // 単純にフラグ追加しても、Composeは状態変更として検出しない。
-        // state/MutableStateは何らかの値を保持し、値が変更した場合は再Compose(UI更新)するインターフェース。
-        // しかし、再コンポジションが随時発生する可能性があるため、フラグはリセットされてしまう問題がある。
-        // 再コンポジションの前後で状態を保持するにはrememberを使用して、状態を保護する。リセットされない。
-        // 状態が変化すると、自動的に再コンポーズする。
-        // また、同じコンポーズを別々の部分から呼び出すと、異なるUIが生成され、状態も別々になる。
-        // 例えば今回の場合だと、ボタンが複数あるため、それぞれで固有の状態を保持する。
-        var expanded by remember { mutableStateOf(false) }
-        val extraPadding by animateDpAsState (
-            if (expanded) 48.dp else 0.dp,
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessLow
-            )
-        )
-        // Surfaceは色を受け取る。
-        // Surfaceの中にネストされたコンポーネント(ここではText)は、背景色の上に描画される。
-        Surface(
-            color = MaterialTheme.colorScheme.primary,
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primary
+            ),
             modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
-            ) {
-            Row(modifier = Modifier.padding(24.dp)) {
-                // SurfaceやTextなどのほとんどのCompose UI要素は引数にmodifier(修飾子)を持っている。
-                // 1つの要素に複数の修飾子をつけるときは、繋げればいい。
-                Column(modifier = Modifier
-                    .weight(1f)
-                    .padding(bottom = extraPadding.coerceAtLeast(0.dp))
-                ) {
-                    // modifierは親レイアウト内での配置、表示、動作を指定できる。
-                    Text(text = "Hello!")
-                    Text(
-                        text = "$name",
-                        style = MaterialTheme.typography.headlineMedium.copy(
-                            fontWeight = FontWeight.ExtraBold
-                        )
-                    )
-                }
-                ElevatedButton(onClick = { expanded = !expanded }) {
-                    Text(if (expanded) "show less" else "show more")
-                }
-            }
+        ) {
+            CardContent(name = name)
         }
     }
     @Composable
@@ -207,6 +173,63 @@ class MainActivity : ComponentActivity() {
     private fun OnboardingPreview() {
         BasicsCodelabTheme {
             OnboardingScreen(onContinueClicked = {})
+        }
+    }
+
+    @Composable
+    private fun CardContent(name: String) {
+        // 状態保持のためexpandedフラグを定義。
+        // 単純にフラグ追加しても、Composeは状態変更として検出しない。
+        // state/MutableStateは何らかの値を保持し、値が変更した場合は再Compose(UI更新)するインターフェース。
+        // しかし、再コンポジションが随時発生する可能性があるため、フラグはリセットされてしまう問題がある。
+        // 再コンポジションの前後で状態を保持するにはrememberを使用して、状態を保護する。リセットされない。
+        // 状態が変化すると、自動的に再コンポーズする。
+        // また、同じコンポーズを別々の部分から呼び出すと、異なるUIが生成され、状態も別々になる。
+        // 例えば今回の場合だと、ボタンが複数あるため、それぞれで固有の状態を保持する。
+        var expanded by remember { mutableStateOf(false) }
+        Row(
+            modifier = Modifier
+                .padding(24.dp)
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                )
+            ) {
+            // SurfaceやTextなどのほとんどのCompose UI要素は引数にmodifier(修飾子)を持っている。
+            // 1つの要素に複数の修飾子をつけるときは、繋げればいい。
+            Column(modifier = Modifier
+                .weight(1f)
+                .padding(12.dp)
+            ) {
+                // modifierは親レイアウト内での配置、表示、動作を指定できる。
+                Text(text = "Hello!")
+                Text(
+                    text = "$name",
+                    style = MaterialTheme.typography.headlineMedium.copy(
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                )
+                if (expanded) {
+                    Text(
+                        text = ("Composem ipsum color sit lazy, " +
+                                "padding theme elit, sed do bouncy. ").repeat(4)
+                    )
+                }
+            }
+            IconButton(onClick = { expanded = !expanded }) {
+                // imageVectorはベクターのマテリアルアイコン
+                // contentDescriptionはアイコンの説明。nullでもOK
+                Icon(
+                    imageVector = if (expanded) Filled.ExpandLess else Filled.ExpandMore,
+                    contentDescription = if (expanded) {
+                        stringResource(id = R.string.show_less)
+                    } else {
+                        stringResource(id = R.string.show_more)
+                    }
+                )
+            }
         }
     }
 }
