@@ -1,3 +1,4 @@
-Codelab by Google
+# Jetpack Compose basics
 
-Jetpack Compose basics
+- For Codelab practice
+- Codelab by Google
